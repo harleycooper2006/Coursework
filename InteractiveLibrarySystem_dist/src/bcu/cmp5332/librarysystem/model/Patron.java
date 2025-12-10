@@ -21,6 +21,10 @@ public Patron(int id, String name, String phone) {
 	public int getId() {
 	    return id;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
     public void borrowBook(Book book, LocalDate dueDate) throws LibraryException {
         // TODO: implementation here
