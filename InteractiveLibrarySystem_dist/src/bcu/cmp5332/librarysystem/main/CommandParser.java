@@ -6,6 +6,7 @@ import bcu.cmp5332.librarysystem.commands.ListBooks;
 import bcu.cmp5332.librarysystem.commands.AddBook;
 import bcu.cmp5332.librarysystem.commands.AddPatron;
 import bcu.cmp5332.librarysystem.commands.ShowBook;
+import bcu.cmp5332.librarysystem.commands.BorrowBook;
 import bcu.cmp5332.librarysystem.commands.Command;
 import bcu.cmp5332.librarysystem.commands.Help;
 import java.io.BufferedReader;
@@ -60,11 +61,12 @@ public class CommandParser {
                     
                 }
             } else if (parts.length == 3) {
-                int patronID = Integer.parseInt(parts[1]);
-                int bookID = Integer.parseInt(parts[2]);
-
+                
                 if (cmd.equals("borrow")) {
-                    
+                	int patronID = Integer.parseInt(parts[1]);
+                    int bookID = Integer.parseInt(parts[2]);
+                	return new BorrowBook(patronID, bookID);
+                	
                 } else if (cmd.equals("renew")) {
                     
                 } else if (cmd.equals("return")) {
