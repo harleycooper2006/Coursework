@@ -59,12 +59,12 @@ public class Book {
         String details = 
         		"Book #" + id + "\n" +
         		"Title: " + title + "\n" + 
-        		"Author" + author + "\n" + 
+        		"Author: " + author + "\n" + 
         		"Publicaton Year: " + publicationYear +"\n";
         if(isOnLoan()) {
         	details += "Status: on loan\n";
-        	details += "Loaned to: " + loan.getPatron().getName();
-        	details += "Return date: " + loan.getdueDate();
+        	details += "Loaned to: " + loan.getPatron().getName() + "\n" ;
+        	details += "Return date: " + loan.getDueDate();
         }
         else {
         details += "Status: Available\n";

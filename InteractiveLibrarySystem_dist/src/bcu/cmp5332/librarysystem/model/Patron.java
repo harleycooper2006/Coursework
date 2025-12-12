@@ -27,15 +27,30 @@ public Patron(int id, String name, String phone) {
 	}
 
     public void borrowBook(Book book, LocalDate dueDate) throws LibraryException {
-        // TODO: implementation here
+        if(book.isOnLoan()) {
+        	throw new LibraryException("Book is on loan.");
+        }
+        
+        Loan loan = new Loan(this, book, LocalDate.now(), dueDate);
+        
+        book.setLoan(loan);
+        
+        books.add(book);
+        
     }
 
     public void renewBook(Book book, LocalDate dueDate) throws LibraryException {
-        // TODO: implementation here
+    	
     }
 
     public void returnBook(Book book) throws LibraryException {
-        // TODO: implementation here
+    	if(!books.contains(book)) {
+    		throw new LibraryException("The book was not loaned to this patron.");
+    	}
+    	
+    	book.returnToLibrary();
+    	
+    	books.remove(book);
     }
     
     public void addBook(Book book) {

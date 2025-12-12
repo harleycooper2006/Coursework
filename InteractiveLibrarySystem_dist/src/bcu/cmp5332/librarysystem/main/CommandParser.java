@@ -7,6 +7,7 @@ import bcu.cmp5332.librarysystem.commands.AddBook;
 import bcu.cmp5332.librarysystem.commands.AddPatron;
 import bcu.cmp5332.librarysystem.commands.ShowBook;
 import bcu.cmp5332.librarysystem.commands.BorrowBook;
+import bcu.cmp5332.librarysystem.commands.ReturnBook;
 import bcu.cmp5332.librarysystem.commands.Command;
 import bcu.cmp5332.librarysystem.commands.Help;
 import java.io.BufferedReader;
@@ -21,7 +22,7 @@ public class CommandParser {
             String[] parts = line.split(" ", 3);
             String cmd = parts[0];
 
-            // TODO: Link your implemented features to commands here 
+            
             if (cmd.equals("addbook")) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 System.out.print("Title: ");
@@ -70,6 +71,9 @@ public class CommandParser {
                 } else if (cmd.equals("renew")) {
                     
                 } else if (cmd.equals("return")) {
+                	int patronID = Integer.parseInt(parts[1]);
+                    int bookID = Integer.parseInt(parts[2]);
+                	return new ReturnBook(patronID, bookID);
                     
                 }
             }

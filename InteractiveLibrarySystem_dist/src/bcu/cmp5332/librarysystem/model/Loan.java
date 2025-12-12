@@ -28,7 +28,7 @@ public class Loan {
     	return startDate;
     }
     
-    public LocalDate getdueDate() {
+    public LocalDate getDueDate() {
     	return dueDate;
     }
     
