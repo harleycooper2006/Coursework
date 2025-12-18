@@ -12,12 +12,14 @@ public class AddPatron implements Command {
 	private final int id;
     private final String name;
     private final String phone;
+    private String email;
     
 
-    public AddPatron(String name, String phone, int id) {
+    public AddPatron(String name, String phone, int id, String email) {
         this.name = name;
         this.phone = phone;
         this.id= id;   
+        this.email = email;
         
         }
 
@@ -25,7 +27,7 @@ public class AddPatron implements Command {
     public void execute(Library library, LocalDate currentDate) throws LibraryException {
     
     
-    Patron patron = new Patron(id, name, phone);
+    Patron patron = new Patron(id, name, phone, email);
     
     library.addPatron(patron);
     

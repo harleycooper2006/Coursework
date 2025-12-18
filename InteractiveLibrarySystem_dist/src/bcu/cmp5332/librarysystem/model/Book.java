@@ -9,14 +9,16 @@ public class Book {
     private String title;
     private String author;
     private String publicationYear;
+    private String publisher;
 
     private Loan loan;
 
-    public Book(int id, String title, String author, String publicationYear) {
+    public Book(int id, String title, String author, String publicationYear, String publisher) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
+        this.publisher = publisher;
     }
 
     public int getId() {
@@ -60,7 +62,8 @@ public class Book {
         		"Book #" + id + "\n" +
         		"Title: " + title + "\n" + 
         		"Author: " + author + "\n" + 
-        		"Publicaton Year: " + publicationYear +"\n";
+        		"Publicaton Year: " + publicationYear +"\n" +
+        		"Publisher: " + publisher +"\n";
         if(isOnLoan()) {
         	details += "Status: on loan\n";
         	details += "Loaned to: " + loan.getPatron().getName() + "\n" ;
@@ -103,4 +106,14 @@ public class Book {
     public void returnToLibrary() {
         loan = null;
     }
+    
+    public String getPublisher() {
+    	return publisher;
+    }
+    
+    public void setPublisher() {
+    	this.publisher = publisher;
+    }
+    
+    
 }
