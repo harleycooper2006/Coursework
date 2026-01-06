@@ -6,6 +6,7 @@ import bcu.cmp5332.librarysystem.commands.ListBooks;
 import bcu.cmp5332.librarysystem.commands.AddBook;
 import bcu.cmp5332.librarysystem.commands.AddPatron;
 import bcu.cmp5332.librarysystem.commands.ShowBook;
+import bcu.cmp5332.librarysystem.commands.ShowPatron;
 import bcu.cmp5332.librarysystem.commands.BorrowBook;
 import bcu.cmp5332.librarysystem.commands.ReturnBook;
 import bcu.cmp5332.librarysystem.commands.Command;
@@ -64,7 +65,7 @@ public class CommandParser {
                 if (cmd.equals("showbook")) {          
                 	return new ShowBook(id);            	
                 } else if (cmd.equals("showpatron")) {
-                    return new bcu.cmp5332.librarysystem.commands.ShowPatron(id);
+                    return new ShowPatron(id);
                 }
             } else if (parts.length == 3) {
                 

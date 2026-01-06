@@ -25,12 +25,8 @@ public class Library {
         return books.get(id);
     }
 
-    public Patron getPatronByID(int id) throws LibraryException {
-    	if (!patrons.containsKey(id)) {
-            throw new LibraryException("There is no such Patron with that ID.");
-        }
-        return patrons.get(id);
-    }
+   
+  
 
     public void addBook(Book book) {
         if (books.containsKey(book.getId())) {

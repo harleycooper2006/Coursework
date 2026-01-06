@@ -26,7 +26,7 @@ public class BorrowBook implements Command {
 		
 		LocalDate dueDate = currentDate.plusDays(library.getLoanPeriod());
 		
-		patron.borrowBook(book, dueDate);
+		patron.borrowBook(book);
 		
 		System.out.println("Book # " + bookID + " Issued to patron # " + patronID);
 	}

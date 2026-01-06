@@ -1,5 +1,6 @@
 package bcu.cmp5332.librarysystem.model;
-
+import java.util.Collections;
+import bcu.cmp5332.librarysystem.main.LibraryException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,10 @@ public class Patron {
 
     public int getId() {
         return id;
+    }
+    
+    public String getName() {
+    	return name;
     }
 
     public String getDetailsLong() {
@@ -50,5 +55,33 @@ public class Patron {
 
     public void removeBook(Book book) {
         books.remove(book);
+    }
+    
+    public List<Book> getBorrowedBooks() {
+    	return Collections.unmodifiableList(books);
+    }
+    
+    public void borrowBook(Book book) throws LibraryException {
+    	
+    	if(book == null) {
+    		throw new LibraryException("Book not found.");
+    	}
+    	if (books.contains(book)) {
+    		throw new LibraryException("Patron already has this book loaned to them.");
+    	}
+    	
+    	books.add(book);
+    	
+    }
+    
+    public void returnBook(Book book) throws LibraryException {
+    	if (book == null) {
+    		throw new LibraryException("No Book found.");
+    	}
+    	if (!books.contains(book)) {
+    		throw new LibraryException("Book is not on loan to patron.");
+    	}
+    	
+    	books.remove(book);
     }
 }
