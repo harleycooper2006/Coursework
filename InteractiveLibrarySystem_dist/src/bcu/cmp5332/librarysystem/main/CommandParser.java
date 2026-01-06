@@ -64,7 +64,7 @@ public class CommandParser {
                 if (cmd.equals("showbook")) {          
                 	return new ShowBook(id);            	
                 } else if (cmd.equals("showpatron")) {
-                    
+                    return new bcu.cmp5332.librarysystem.commands.ShowPatron(id);
                 }
             } else if (parts.length == 3) {
                 
