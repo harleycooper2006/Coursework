@@ -46,5 +46,13 @@ public class Library {
         	patrons.put(patron.getId(), patron);
         }
     
+    public Patron getPatronByID(int id) throws LibraryException {
+        Patron patron = patrons.get(id);
+        if (patron == null) {
+            throw new LibraryException("No patron with ID " + id + " exists.");
+        }
+        return patron;
+    }
+
 }
  

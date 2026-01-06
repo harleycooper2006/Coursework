@@ -1,69 +1,54 @@
 package bcu.cmp5332.librarysystem.model;
 
-import bcu.cmp5332.librarysystem.main.LibraryException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Patron {
-    
-    private int id;
-    private String name;
-    private String phone;
-    private String email;
-    private final List<Book> books = new ArrayList<>();
-    
-public Patron(int id, String name, String phone, String email) {
-	this.id = id;
-    this.name = name;
-    this.phone = phone;
-    this.email = email;
-}
-    
-	public int getId() {
-	    return id;
-	}
-	
-	public String getName() {
-		return name;
-	}
 
-    public void borrowBook(Book book, LocalDate dueDate) throws LibraryException {
-        if(book.isOnLoan()) {
-        	throw new LibraryException("Book is on loan.");
+    private final int id;
+    private final String name;
+    private final String phone;
+    private final String email;
+    private final List<Book> books;
+
+    public Patron(int id, String name, String phone, String email) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.books = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getDetailsLong() {
+        String details =
+            "Patron #" + id + "\n" +
+            "Name: " + name + "\n" +
+            "Phone: " + phone + "\n" +
+            "Email: " + email + "\n";
+
+        details += "Borrowed books:\n";
+
+        if (books.isEmpty()) {
+            details += "  (none)\n";
+        } else {
+            for (Book book : books) {
+                details += "  - " + book.getDetailsShort() + "\n";
+            }
         }
-        
-        Loan loan = new Loan(this, book, LocalDate.now(), dueDate);
-        
-        book.setLoan(loan);
-        
-        books.add(book);
-        
+
+        return details;
     }
 
-    public void renewBook(Book book, LocalDate dueDate) throws LibraryException {
-    	
-    }
-
-    public void returnBook(Book book) throws LibraryException {
-    	if(!books.contains(book)) {
-    		throw new LibraryException("The book was not loaned to this patron.");
-    	}
-    	
-    	book.returnToLibrary();
-    	
-    	books.remove(book);
-    }
-    
+    /* ---- ONLY NEEDED SO BORROW FEATURE CAN DISPLAY BOOKS ---- */
     public void addBook(Book book) {
-        // TODO: implementation here
+        books.add(book);
     }
-    
-   
-    
-    
-    public String getEmail() {
-    	return email;
+
+    public void removeBook(Book book) {
+        books.remove(book);
     }
 }
- 
