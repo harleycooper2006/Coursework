@@ -1,6 +1,7 @@
 package bcu.cmp5332.librarysystem.gui;
 
 import bcu.cmp5332.librarysystem.model.Book;
+import bcu.cmp5332.librarysystem.model.Patron;
 import bcu.cmp5332.librarysystem.model.Library;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -142,7 +143,7 @@ public class MainWindow extends JFrame implements ActionListener {
             
             
         } else if (ae.getSource() == memView) {
-            
+            displayPatrons();
             
         } else if (ae.getSource() == memAdd) {
             
@@ -165,6 +166,28 @@ public class MainWindow extends JFrame implements ActionListener {
             data[i][1] = book.getAuthor();
             data[i][2] = book.getPublicationYear();
             data[i][3] = book.getStatus();
+        }
+        
+        public void displayPatron() {
+        	List<Patron> patronList = library.getPatrons();
+        	
+        	String[] columns = new String[] {"ID", "Author", "Pub Date", "Status"};
+        	
+        	Object[][] data = new Object[patronsList.size()][5];
+        	for (int i = 0; i < patronsList.get(); i++) {
+        		Patron patron = patronsList.get(i);
+        		
+        		data[i][0] = patron.getId();
+        		data[i][1] = patron.getName();
+        		data[i][2] = patron.getPhone();
+        		data[i][3] = patron.getEmail();
+        		data[i][4] = patron.getBorrowedBooks().size();
+        	}
+        	
+        	JTable table = new JTable(data, columns);
+        	this.getContentPane().removeAll();
+        	this.getContentPane().add(new JScrollPane(table));
+        	this.revalidate();
         }
 
         JTable table = new JTable(data, columns);
