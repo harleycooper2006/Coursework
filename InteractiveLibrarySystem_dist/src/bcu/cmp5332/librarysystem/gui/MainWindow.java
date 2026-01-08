@@ -151,7 +151,7 @@ public class MainWindow extends JFrame implements ActionListener {
 			}
             
         } else if (ae.getSource() == memAdd) {
-            
+            new AddPatronWindow(this);
             
         }else if (ae.getSource() == memDel) {
             
@@ -199,8 +199,12 @@ public class MainWindow extends JFrame implements ActionListener {
         		data[i][4] = patron.getBorrowedBooks().size();
         	}
         	
-        	JTable table = new JTable(data, columns);
-        	
+        	JTable table = new JTable(data, columns) {
+        	@Override
+        	public boolean isCellEditable(int row, int column) {
+        		return false;
+        	}
+        	};
         
         table.addMouseListener(new java.awt.event.MouseAdapter() {
         	@Override
