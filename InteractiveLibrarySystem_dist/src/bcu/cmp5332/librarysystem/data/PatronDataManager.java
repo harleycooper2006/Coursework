@@ -1,21 +1,45 @@
 package bcu.cmp5332.librarysystem.data;
-
 import bcu.cmp5332.librarysystem.model.Library;
+import bcu.cmp5332.librarysystem.model.Patron;
 import bcu.cmp5332.librarysystem.main.LibraryException;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class PatronDataManager implements DataManager {
 
     private final String RESOURCE = "./resources/data/patrons.txt";
-    
+
     @Override
     public void loadData(Library library) throws IOException, LibraryException {
-        // TODO: implementation here
+        try (Scanner sc = new Scanner(new File(RESOURCE))) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                String[] p = line.split(SEPARATOR, -1);
+
+                int id = Integer.parseInt(p[0]);
+                String name = p[1];
+                String phone = p[2];
+                String email = p[3];
+
+                library.addPatron(new Patron(id, name, phone, email));
+            }
+        }
     }
 
     @Override
     public void storeData(Library library) throws IOException {
-        // TODO: implementation here
+        try (PrintWriter out = new PrintWriter(new FileWriter(RESOURCE))) {
+            for (Patron patron : library.getPatrons()) {
+                out.print(patron.getId() + SEPARATOR);
+                out.print(patron.getPhone() + SEPARATOR);
+                out.print(patron.getEmail() + SEPARATOR);
+                out.println();
+            }
+        }
     }
 }
- 
