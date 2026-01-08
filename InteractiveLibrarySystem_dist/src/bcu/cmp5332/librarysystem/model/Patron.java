@@ -69,6 +69,9 @@ public class Patron {
     	return Collections.unmodifiableList(books);
     }
     
+   
+
+    
     public void borrowBook(Book book) throws LibraryException {
     	
     	if(book == null) {
@@ -91,5 +94,10 @@ public class Patron {
     	}
     	
     	books.remove(book);
+    }
+    
+     public String getDetailsShort() 
+     {
+        return id + ": " + name;
     }
 }

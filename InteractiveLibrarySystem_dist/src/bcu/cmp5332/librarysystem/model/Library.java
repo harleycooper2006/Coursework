@@ -34,6 +34,12 @@ public class Library {
         }
         books.put(book.getId(), book);
     }
+    
+    public List<Patron> getPatrons() {
+        List<Patron> out = new ArrayList<>(patrons.values());
+        return Collections.unmodifiableList(out);
+    }
+
 
     public void addPatron(Patron patron) {
         if (patrons.containsKey(patron.getId())) {
