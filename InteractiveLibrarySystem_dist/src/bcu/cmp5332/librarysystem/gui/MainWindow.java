@@ -168,13 +168,20 @@ public class MainWindow extends JFrame implements ActionListener {
             data[i][3] = book.getStatus();
         }
         
+        JTable table = new JTable(data, columns);
+        this.getContentPane().removeAll();
+        this.getContentPane().add(new JScrollPane(table));
+        this.revalidate();
+    
+    }
+        
         public void displayPatrons() {
         	List<Patron> patronsList = library.getPatrons();
         	
-        	String[] columns = new String[] {"ID", "Author", "Pub Date", "Status"};
+        	String[] columns = new String[] {"ID", "Name", "Phone", "Email"};
         	
         	Object[][] data = new Object[patronsList.size()][5];
-        	for (int i = 0; i < patronsList.get(); i++) {
+        	for (int i = 0; i < patronsList.size(); i++) {
         		Patron patron = patronsList.get(i);
         		
         		data[i][0] = patron.getId();
@@ -189,10 +196,43 @@ public class MainWindow extends JFrame implements ActionListener {
         	this.getContentPane().add(new JScrollPane(table));
         	this.revalidate();
         }
-
-        JTable table = new JTable(data, columns);
-        this.getContentPane().removeAll();
-        this.getContentPane().add(new JScrollPane(table));
-        this.revalidate();
-    }	
+        
+        JTable table = new JTable (data, column);
+        
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+        	@Override
+        	public void mouseClicked(java.awt.event.MouseEvent e) {
+        		if (e.getClickCount() == 2) {
+        	int row = table.getSelectedRow();
+        	if (row >= 0) {
+        		int patronID = (int) table.getValueAt (row, 0);
+        		showBorrowedPopUp(patronID);
+        	}
+        }
+        	
+        
+       });
+        
+        private void showBorrowedPopUp(int patronID) {
+        	Patron patron = library.getPatronByID(patronID);
+        	
+        	List<Book> borrowed = patron.getBorrowedBooks();
+        	
+        	if (borrowed.isEmpty()) {
+        		javax.swing.JOptionPane.showMessageDialog(
+        				this,
+        				patron.getName() + " has no loaned books.", "Borrowed books",
+        				javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        		return;
+        	}
+        	
+        	String[] cols = new String[] {"ID", "Title", "Year", "Status"};
+        	Object[] rows = new Object[borrowed.size()] [4];
+        	
+        	for (int i = 0; i < borrowed.size(); i++) {
+        		Book b = borrowed.get(i);
+        		rows[i][0] = b.getID()
+        	}
+        	
+        }
 }

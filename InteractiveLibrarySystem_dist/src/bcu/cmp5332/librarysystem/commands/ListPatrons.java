@@ -15,6 +15,6 @@ public class ListPatrons implements Command {
         for (Patron p : patrons) {
             System.out.println(p.getDetailsShort());
         }
-        System.out.println(patrons.size() + " patron(s)");
+        System.out.println("there are: " + patrons.size() + " patron(s)");
     }
 }
