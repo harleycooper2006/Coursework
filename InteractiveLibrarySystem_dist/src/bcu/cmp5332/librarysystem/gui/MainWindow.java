@@ -168,8 +168,8 @@ public class MainWindow extends JFrame implements ActionListener {
             data[i][3] = book.getStatus();
         }
         
-        public void displayPatron() {
-        	List<Patron> patronList = library.getPatrons();
+        public void displayPatrons() {
+        	List<Patron> patronsList = library.getPatrons();
         	
         	String[] columns = new String[] {"ID", "Author", "Pub Date", "Status"};
         	
