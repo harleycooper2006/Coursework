@@ -1,5 +1,5 @@
 package bcu.cmp5332.librarysystem.main;
-
+import bcu.cmp5332.librarysystem.commands.ListPatrons;
 import bcu.cmp5332.librarysystem.commands.LoadGUI;
 import bcu.cmp5332.librarysystem.model.Book;
 import bcu.cmp5332.librarysystem.commands.ListBooks;
@@ -55,10 +55,13 @@ public class CommandParser {
                 if (line.equals("listbooks")) {
                     return new ListBooks();
                 } else if (line.equals("listpatrons")) {
+                    return new ListPatrons();
+                }
+
                      
                 } else if (line.equals("help")) {
                     return new Help();
-                }
+                
             } else if (parts.length == 2) {
                 int id = Integer.parseInt(parts[1]);
 
