@@ -1,13 +1,19 @@
 package bcu.cmp5332.librarysystem.data;
+
 import bcu.cmp5332.librarysystem.main.LibraryException;
 import bcu.cmp5332.librarysystem.model.Book;
 import bcu.cmp5332.librarysystem.model.Library;
 import bcu.cmp5332.librarysystem.model.Loan;
 import bcu.cmp5332.librarysystem.model.Patron;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -34,14 +40,17 @@ public class LoanDataManager implements DataManager {
 
                 Loan loan = new Loan(patron, book, startDate, dueDate);
                 book.setLoan(loan);
-                patron.addBook(book); // so showpatron lists borrowed books
+                patron.addBook(book);
             }
         }
     }
 
     @Override
     public void storeData(Library library) throws IOException {
-        try (PrintWriter out = new PrintWriter(new FileWriter(RESOURCE))) {
+        Path target = Paths.get(RESOURCE);
+        Path tmp = Paths.get(RESOURCE + ".tmp");
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(tmp.toFile()))) {
             for (Book book : library.getBooks()) {
                 if (book.isOnLoan() && book.getLoan() != null) {
                     Loan loan = book.getLoan();
@@ -54,5 +63,7 @@ public class LoanDataManager implements DataManager {
                 }
             }
         }
+
+        Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
     }
 }

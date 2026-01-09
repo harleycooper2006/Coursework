@@ -1,7 +1,7 @@
 package bcu.cmp5332.librarysystem.main;
+
 import bcu.cmp5332.librarysystem.commands.ListPatrons;
 import bcu.cmp5332.librarysystem.commands.LoadGUI;
-import bcu.cmp5332.librarysystem.model.Book;
 import bcu.cmp5332.librarysystem.commands.ListBooks;
 import bcu.cmp5332.librarysystem.commands.AddBook;
 import bcu.cmp5332.librarysystem.commands.AddPatron;
@@ -11,92 +11,92 @@ import bcu.cmp5332.librarysystem.commands.BorrowBook;
 import bcu.cmp5332.librarysystem.commands.ReturnBook;
 import bcu.cmp5332.librarysystem.commands.Command;
 import bcu.cmp5332.librarysystem.commands.Help;
+import bcu.cmp5332.librarysystem.commands.RenewBook;
+import bcu.cmp5332.librarysystem.commands.DeleteBook;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
-import bcu.cmp5332.librarysystem.commands.RenewBook;
-
 
 public class CommandParser {
-    
-	public static Command parse(String line) throws IOException, LibraryException {
-	    try {
-	        String[] parts = line.split(" ", 3);
-	        String cmd = parts[0];
 
-	        if (cmd.equals("addbook")) {
-	            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	            System.out.print("Title: ");
-	            String title = br.readLine();
-	            System.out.print("Author: ");
-	            String author = br.readLine();
-	            System.out.print("Publication Year: ");
-	            String publicationYear = br.readLine();
-	            System.out.print("Publisher: ");
-	            String publisher = br.readLine();
+    public static Command parse(String line) throws IOException, LibraryException {
+        try {
+            String[] parts = line.split(" ", 3);
+            String cmd = parts[0];
 
-	            return new AddBook(title, author, publicationYear, publisher);
+            if (cmd.equals("addbook")) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("Title: ");
+                String title = br.readLine();
+                System.out.print("Author: ");
+                String author = br.readLine();
+                System.out.print("Publication Year: ");
+                String publicationYear = br.readLine();
+                System.out.print("Publisher: ");
+                String publisher = br.readLine();
 
-	        } else if (cmd.equals("addpatron")) {
-	            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	            System.out.print("id: ");
-	            int id = Integer.parseInt(br.readLine());
-	            System.out.print("Name: ");
-	            String name = br.readLine();
-	            System.out.print("Phone: ");
-	            String phone = br.readLine();
-	            System.out.print("Email: ");
-	            String email = br.readLine();
+                return new AddBook(title, author, publicationYear, publisher);
 
-	            return new AddPatron(name, phone, email);
+            } else if (cmd.equals("addpatron")) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("id: ");
+                br.readLine(); // NOTE: your AddPatron doesn't take id, so we read it but ignore
+                System.out.print("Name: ");
+                String name = br.readLine();
+                System.out.print("Phone: ");
+                String phone = br.readLine();
+                System.out.print("Email: ");
+                String email = br.readLine();
 
-	        } else if (cmd.equals("loadgui")) {
-	            return new LoadGUI();
+                return new AddPatron(name, phone, email);
 
-	        } else if (parts.length == 1) {
-	            if (line.equals("listbooks")) {
-	                return new ListBooks();
-	            } else if (line.equals("listpatrons")) {
-	                return new ListPatrons();
-	            } else if (line.equals("help")) {
-	                return new Help();
-	            }
+            } else if (cmd.equals("loadgui")) {
+                return new LoadGUI();
 
-	        } else if (parts.length == 2) {
-	            int id = Integer.parseInt(parts[1]);
+            } else if (parts.length == 1) {
+                if (line.equals("listbooks")) {
+                    return new ListBooks();
+                } else if (line.equals("listpatrons")) {
+                    return new ListPatrons();
+                } else if (line.equals("help")) {
+                    return new Help();
+                }
 
-	            if (cmd.equals("showbook")) {
-	                return new ShowBook(id);
-	            } else if (cmd.equals("showpatron")) {
-	                return new ShowPatron(id);
-	            }
+            } else if (parts.length == 2) {
+                int id = Integer.parseInt(parts[1]);
 
-	        } else if (parts.length == 3) {
+                if (cmd.equals("showbook")) {
+                    return new ShowBook(id);
+                } else if (cmd.equals("showpatron")) {
+                    return new ShowPatron(id);
+                } else if (cmd.equals("deletebook")) {
+                    return new DeleteBook(id);
+                }
 
-	            if (cmd.equals("borrow")) {
-	                int patronID = Integer.parseInt(parts[1]);
-	                int bookID = Integer.parseInt(parts[2]);
-	                return new BorrowBook(patronID, bookID);
+            } else if (parts.length == 3) {
 
-	            } else if (cmd.equals("renew")) {
-	                int patronID = Integer.parseInt(parts[1]);
-	                int bookID = Integer.parseInt(parts[2]);
-	                return new RenewBook(patronID, bookID);
+                if (cmd.equals("borrow")) {
+                    int patronID = Integer.parseInt(parts[1]);
+                    int bookID = Integer.parseInt(parts[2]);
+                    return new BorrowBook(patronID, bookID);
 
-	            } else if (cmd.equals("return")) {
-	                int patronID = Integer.parseInt(parts[1]);
-	                int bookID = Integer.parseInt(parts[2]);
-	                return new ReturnBook(patronID, bookID);
-	            }
-	        }
+                } else if (cmd.equals("renew")) {
+                    int patronID = Integer.parseInt(parts[1]);
+                    int bookID = Integer.parseInt(parts[2]);
+                    return new RenewBook(patronID, bookID);
 
-	    } catch (NumberFormatException ex) {
-	        // fall through to invalid command
-	    }
+                } else if (cmd.equals("return")) {
+                    int patronID = Integer.parseInt(parts[1]);
+                    int bookID = Integer.parseInt(parts[2]);
+                    return new ReturnBook(patronID, bookID);
+                }
+            }
 
-	    throw new LibraryException("Invalid command.");
-	}
+        } catch (NumberFormatException ex) {
+            // fall through to invalid command
+        }
 
+        throw new LibraryException("Invalid command.");
     }
-
+}

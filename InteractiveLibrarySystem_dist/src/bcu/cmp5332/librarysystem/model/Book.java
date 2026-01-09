@@ -1,9 +1,9 @@
 package bcu.cmp5332.librarysystem.model;
-
 import bcu.cmp5332.librarysystem.main.LibraryException;
 import bcu.cmp5332.librarysystem.commands.ShowPatron;
 import java.time.LocalDate;
 
+private boolean deleted = false;
 public class Book {
     
     private int id;
@@ -116,5 +116,13 @@ public class Book {
     	this.publisher = publisher;
     }
     
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     
 }

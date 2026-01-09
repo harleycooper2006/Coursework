@@ -6,6 +6,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 
 public class PatronDataManager implements DataManager {
@@ -33,7 +37,10 @@ public class PatronDataManager implements DataManager {
 
     @Override
     public void storeData(Library library) throws IOException {
-        try (PrintWriter out = new PrintWriter(new FileWriter(RESOURCE))) {
+        Path target = Paths.get(RESOURCE);
+        Path tmp = Paths.get(RESOURCE + ".tmp");
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(tmp.toFile()))) {
             for (Patron patron : library.getPatrons()) {
                 out.print(patron.getId() + SEPARATOR);
                 out.print(patron.getName() + SEPARATOR);
@@ -42,5 +49,7 @@ public class PatronDataManager implements DataManager {
                 out.println();
             }
         }
+
+        Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
     }
 }
