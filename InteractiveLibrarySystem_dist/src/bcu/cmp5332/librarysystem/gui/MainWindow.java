@@ -1,5 +1,5 @@
 package bcu.cmp5332.librarysystem.gui;
-
+import bcu.cmp5332.librarysystem.main.LibraryException;
 import bcu.cmp5332.librarysystem.model.Book;
 import bcu.cmp5332.librarysystem.model.Patron;
 import bcu.cmp5332.librarysystem.model.Library;
@@ -143,16 +143,22 @@ public class MainWindow extends JFrame implements ActionListener {
             
             
         } else if (ae.getSource() == memView) {
-            displayPatrons();
+            try {
+				displayPatrons();
+			} catch (LibraryException e) {
+				
+				e.printStackTrace();
+			}
             
         } else if (ae.getSource() == memAdd) {
+            new AddPatronWindow(this);
             
-            
-        } else if (ae.getSource() == memDel) {
+        }else if (ae.getSource() == memDel) {
             
             
         }
-    }
+
+}
 
     public void displayBooks() {
         List<Book> booksList = library.getBooks();
@@ -172,13 +178,15 @@ public class MainWindow extends JFrame implements ActionListener {
         this.getContentPane().removeAll();
         this.getContentPane().add(new JScrollPane(table));
         this.revalidate();
+}
     
-    }
+    
         
-        public void displayPatrons() {
+        public void displayPatrons() throws LibraryException{
+        	
         	List<Patron> patronsList = library.getPatrons();
         	
-        	String[] columns = new String[] {"ID", "Name", "Phone", "Email"};
+        	String[] columns = new String[] {"ID", "Name", "Phone", "Email", "Books on loan"};
         	
         	Object[][] data = new Object[patronsList.size()][5];
         	for (int i = 0; i < patronsList.size(); i++) {
@@ -191,13 +199,12 @@ public class MainWindow extends JFrame implements ActionListener {
         		data[i][4] = patron.getBorrowedBooks().size();
         	}
         	
-        	JTable table = new JTable(data, columns);
-        	this.getContentPane().removeAll();
-        	this.getContentPane().add(new JScrollPane(table));
-        	this.revalidate();
-        }
-        
-        JTable table = new JTable (data, column);
+        	JTable table = new JTable(data, columns) {
+        	@Override
+        	public boolean isCellEditable(int row, int column) {
+        		return false;
+        	}
+        	};
         
         table.addMouseListener(new java.awt.event.MouseAdapter() {
         	@Override
@@ -206,14 +213,27 @@ public class MainWindow extends JFrame implements ActionListener {
         	int row = table.getSelectedRow();
         	if (row >= 0) {
         		int patronID = (int) table.getValueAt (row, 0);
-        		showBorrowedPopUp(patronID);
+        		try {
+					showBorrowedPopUp(patronID);
+				} catch (LibraryException e1) {
+					
+					e1.printStackTrace();
+				}
         	}
+        		}
+        	}
+        });
+        
+        this.getContentPane().removeAll();
+    	this.getContentPane().add(new JScrollPane(table));
+    	this.revalidate();
         }
         	
         
-       });
+        	
+       
         
-        private void showBorrowedPopUp(int patronID) {
+        private void showBorrowedPopUp(int patronID) throws LibraryException {
         	Patron patron = library.getPatronByID(patronID);
         	
         	List<Book> borrowed = patron.getBorrowedBooks();
@@ -226,13 +246,26 @@ public class MainWindow extends JFrame implements ActionListener {
         		return;
         	}
         	
-        	String[] cols = new String[] {"ID", "Title", "Year", "Status"};
-        	Object[] rows = new Object[borrowed.size()] [4];
+        	String[] columns = new String[] {"ID", "Title", "Year", "Status"};
+        	Object[][] rows = new Object[borrowed.size()] [4];
         	
         	for (int i = 0; i < borrowed.size(); i++) {
         		Book b = borrowed.get(i);
-        		rows[i][0] = b.getID()
+        		rows[i][0] = b.getId();
+        		rows[i][1] = b.getTitle();
+        		rows[i][2] = b.getPublicationYear();
+        		rows[i][3] = b.getStatus();
+        	
         	}
         	
+        	JTable booksTable = new JTable(rows, columns);
+        	JScrollPane scroll = new JScrollPane(booksTable);
+        	scroll.setPreferredSize(new java.awt.Dimension(600, 200));
+        	
+        	javax.swing.JOptionPane.showMessageDialog(
+        			this, scroll, "Books loaned to" + patron.getName() + " (#" + patron.getId() + ")",
+        					javax.swing.JOptionPane.INFORMATION_MESSAGE
+        	);
+         
         }
 }

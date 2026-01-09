@@ -49,7 +49,7 @@ public class CommandParser {
 	            System.out.print("Email: ");
 	            String email = br.readLine();
 
-	            return new AddPatron(name, phone, id, email);
+	            return new AddPatron(name, phone, email);
 
 	        } else if (cmd.equals("loadgui")) {
 	            return new LoadGUI();

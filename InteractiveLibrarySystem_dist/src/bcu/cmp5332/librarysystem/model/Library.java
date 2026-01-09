@@ -55,6 +55,16 @@ public class Library {
         }
         return patron;
     }
+    
+    //this allows us to generate ID automatically and assign it when a new patron is added
+    public int getNextPatronByID() {
+    	if (patrons.isEmpty()) {
+    		return 1;
+    	}
+    	return patrons.keySet().stream()
+    			.max(Integer::compareTo)
+    			.get() + 1;
+    }
 
 }
  
