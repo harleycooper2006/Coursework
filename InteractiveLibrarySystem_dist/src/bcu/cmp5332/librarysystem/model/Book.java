@@ -3,9 +3,11 @@ import bcu.cmp5332.librarysystem.main.LibraryException;
 import bcu.cmp5332.librarysystem.commands.ShowPatron;
 import java.time.LocalDate;
 
-private boolean deleted = false;
+
 public class Book {
     
+	private boolean deleted = false;
+	
     private int id;
     private String title;
     private String author;
@@ -20,6 +22,7 @@ public class Book {
         this.author = author;
         this.publicationYear = publicationYear;
         this.publisher = publisher;
+        
     }
 
     public int getId() {

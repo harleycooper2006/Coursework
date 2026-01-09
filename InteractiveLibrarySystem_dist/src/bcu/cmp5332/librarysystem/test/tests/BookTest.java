@@ -1,4 +1,4 @@
-package bcu.cmp5332.librarysystem.tests;
+package bcu.cmp5332.librarysystem.test.tests;
 import bcu.cmp5332.librarysystem.model.Book;
 import bcu.cmp5332.librarysystem.model.Loan;
 import bcu.cmp5332.librarysystem.model.Patron;

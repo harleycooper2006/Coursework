@@ -179,25 +179,63 @@ public class MainWindow extends JFrame implements ActionListener {
             }
         };
 
-        // 6.1: if book is on loan, show patron details when clicked
+        
+       
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                int row = table.getSelectedRow();
-                if (row < 0 || row >= booksList.size()) return;
+                if (e.getClickCount() != 2) return; 
 
-                Book selectedBook = booksList.get(row);
+                int viewRow = table.getSelectedRow();
+                if (viewRow < 0) return;
 
-                if (!selectedBook.isOnLoan() || selectedBook.getLoan() == null) return;
+               
+                int modelRow = table.convertRowIndexToModel(viewRow);
+                if (modelRow < 0 || modelRow >= booksList.size()) return;
 
-                Patron p = selectedBook.getLoan().getPatron();
-                if (p == null) return;
+                Book selectedBook = booksList.get(modelRow);
 
-                javax.swing.JOptionPane.showMessageDialog(
+                
+                if (selectedBook.getLoan() == null) {
+                    JOptionPane.showMessageDialog(
                         MainWindow.this,
-                        "This book is currently on loan to:\n\n" + p.getDetailsLong(),
-                        "Patron details",
-                        javax.swing.JOptionPane.INFORMATION_MESSAGE
+                        "This book is not currently on loan.",
+                        "Book status",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                    return;
+                }
+
+
+
+                if (selectedBook.getLoan() == null) {
+                    JOptionPane.showMessageDialog(
+                        MainWindow.this,
+                        "This book is marked as on loan, but no loan record was found.\n" +
+                        "Check your IssueBook code sets book.setLoan(...).",
+                        "Loan missing",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+
+                Patron patron = selectedBook.getLoan().getPatron();
+                if (patron == null) {
+                    JOptionPane.showMessageDialog(
+                        MainWindow.this,
+                        "Loan record exists, but no patron is attached.\n" +
+                        "Check Loan stores the Patron and file loading rebuilds links.",
+                        "Patron missing",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+
+                JOptionPane.showMessageDialog(
+                    MainWindow.this,
+                    "This book is currently on loan to:\n\n" + patron.getDetailsLong(),
+                    "Patron details",
+                    JOptionPane.INFORMATION_MESSAGE
                 );
             }
         });
@@ -252,16 +290,12 @@ public class MainWindow extends JFrame implements ActionListener {
         	    }
         	});
 
-        	// Add table to window
+        	
         	this.getContentPane().removeAll();
         	this.getContentPane().add(new JScrollPane(table));
         	this.revalidate();
         	}
 
-        	// <-- closes displayPatrons()
-
-        	} 
-        	// <-- closes MainWindow class
 
         
         	
