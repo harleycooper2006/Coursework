@@ -1,6 +1,7 @@
 package bcu.cmp5332.librarysystem.commands;
 
 import bcu.cmp5332.librarysystem.main.LibraryException;
+import bcu.cmp5332.librarysystem.model.Loan;
 import bcu.cmp5332.librarysystem.model.Library;
 import bcu.cmp5332.librarysystem.model.Patron;
 import bcu.cmp5332.librarysystem.model.Book;
@@ -24,8 +25,16 @@ public class BorrowBook implements Command {
 		Patron patron = library.getPatronByID(patronID);
 		Book book = library.getBookByID(bookID);
 		
+		if (book.getLoan() != null) {
+			throw new LibraryException("Book #" + bookID + "is on loan already.");
+		}
+		
+		
 		LocalDate dueDate = currentDate.plusDays(library.getLoanPeriod());
 		
+		Loan loan = new Loan(patron, book, currentDate, dueDate);
+		
+		book.setLoan(loan);
 		patron.borrowBook(book);
 		
 		System.out.println("Book # " + bookID + " Issued to patron # " + patronID);

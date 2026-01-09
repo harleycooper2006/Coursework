@@ -86,18 +86,20 @@ public class Book {
     }
     
     public String getStatus() {
-        // TODO: implementation here
-        return null;
+        return isOnLoan() ? "On loan" : "Available";
     }
 
     public LocalDate getDueDate() {
-        // TODO: implementation here
-        return null;
+        return (loan == null) ? null : loan.getDueDate();
     }
     
     public void setDueDate(LocalDate dueDate) throws LibraryException {
-        // TODO: implementation here
-    }
+        if (loan == null) {
+        	throw new LibraryException("Due date cant be set right now, book is not on loan");
+        }
+        loan.setDueDate(dueDate);
+        }
+    
 
     public Loan getLoan() {
         return loan;
@@ -115,7 +117,7 @@ public class Book {
     	return publisher;
     }
     
-    public void setPublisher() {
+    public void setPublisher(String setPublisher) {
     	this.publisher = publisher;
     }
     

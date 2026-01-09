@@ -1,6 +1,7 @@
 package bcu.cmp5332.librarysystem.test.tests;
 import bcu.cmp5332.librarysystem.model.Book;
 
+import bcu.cmp5332.librarysystem.commands.RenewBook;
 import bcu.cmp5332.librarysystem.model.Loan;
 import bcu.cmp5332.librarysystem.model.Patron;
 import bcu.cmp5332.librarysystem.main.LibraryException;
@@ -18,7 +19,7 @@ public class PatronTest {
         Patron p = new Patron(1, "Hayden", "123", "Hayden@mail");
         String s = p.getDetailsShort();
         assertTrue(s.contains("1"));
-        assertTrue(s.toLowerCase().contains("ethan"));
+        assertTrue(s.toLowerCase().contains("hayden"));
     }
 
     @Test
@@ -52,27 +53,28 @@ public class PatronTest {
 
     @Test
     void renewBook_updatesDueDate_whenLoanExistsAndBelongsToPatron() throws LibraryException {
-        Patron p = new Patron(1, "Hayden", "123", "Hayden@mail");
-        Book b = new Book(15, "Pride and Prejudice", "Jane Austen", "1813", "Whatever");
+        Patron patron = new Patron(1, "Hayden", "123", "Hayden@mail");
+        Book book = new Book(15, "Pride and Prejudice", "Jane Austen", "1813", "Whatever");
+        
 
        
         LocalDate start = LocalDate.of(2026, 1, 1);
         LocalDate oldDue = LocalDate.of(2026, 1, 8);
-        Loan loan = new Loan(p, b, start, oldDue);
-        b.setLoan(loan);
-        p.addBook(b);
+        Loan loan = new Loan(patron, book, start, oldDue);
+        book.setLoan(loan);
+        patron.addBook(book);
 
         LocalDate newDue = LocalDate.of(2026, 1, 20);
-        p.renewBook(b, newDue);
+        
 
-        assertEquals(newDue, b.getLoan().getDueDate());
+        assertEquals(newDue, book.getLoan().getDueDate());
     }
 
     @Test
     void renewBook_throwsIfPatronDoesNotHaveBook() {
-        Patron p = new Patron(1, "Hayden", "123", "Hayden@mail");
-        Book b = new Book(15, "Pride and Prejudice", "Jane Austen", "1813", "Whatever");
+        Patron patron = new Patron(1, "Hayden", "123", "Hayden@mail");
+        Book book = new Book(15, "Pride and Prejudice", "Jane Austen", "1813", "Whatever");
 
-        assertThrows(LibraryException.class, () -> p.renewBook(b, LocalDate.now().plusDays(7)));
+        assertThrows(LibraryException.class, () -> Patron.renewBook(book, LocalDate.now().plusDays(7)));
     }
 }

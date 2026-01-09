@@ -1,5 +1,6 @@
 package bcu.cmp5332.librarysystem.gui;
 import bcu.cmp5332.librarysystem.main.LibraryException;
+
 import bcu.cmp5332.librarysystem.model.Book;
 import bcu.cmp5332.librarysystem.model.Patron;
 import bcu.cmp5332.librarysystem.model.Library;
@@ -14,7 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-
+import bcu.cmp5332.librarysystem.model.Loan;
 
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -184,19 +185,18 @@ public class MainWindow extends JFrame implements ActionListener {
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                if (e.getClickCount() != 2) return; 
+                if (e.getClickCount() != 2) return;
 
                 int viewRow = table.getSelectedRow();
                 if (viewRow < 0) return;
 
-               
                 int modelRow = table.convertRowIndexToModel(viewRow);
                 if (modelRow < 0 || modelRow >= booksList.size()) return;
 
                 Book selectedBook = booksList.get(modelRow);
 
-                
-                if (selectedBook.getLoan() == null) {
+                Loan loan = selectedBook.getLoan(); // <-- only check once
+                if (loan == null) {
                     JOptionPane.showMessageDialog(
                         MainWindow.this,
                         "This book is not currently on loan.",
@@ -206,25 +206,12 @@ public class MainWindow extends JFrame implements ActionListener {
                     return;
                 }
 
-
-
-                if (selectedBook.getLoan() == null) {
-                    JOptionPane.showMessageDialog(
-                        MainWindow.this,
-                        "This book is marked as on loan, but no loan record was found.\n" +
-                        "Check your IssueBook code sets book.setLoan(...).",
-                        "Loan missing",
-                        JOptionPane.ERROR_MESSAGE
-                    );
-                    return;
-                }
-
-                Patron patron = selectedBook.getLoan().getPatron();
+                Patron patron = loan.getPatron();
                 if (patron == null) {
                     JOptionPane.showMessageDialog(
                         MainWindow.this,
                         "Loan record exists, but no patron is attached.\n" +
-                        "Check Loan stores the Patron and file loading rebuilds links.",
+                        "Check your BorrowBook/IssueBook sets the patron in the Loan (and loading rebuilds links).",
                         "Patron missing",
                         JOptionPane.ERROR_MESSAGE
                     );
@@ -239,6 +226,7 @@ public class MainWindow extends JFrame implements ActionListener {
                 );
             }
         });
+
 
         this.getContentPane().removeAll();
         this.getContentPane().add(new JScrollPane(table));
