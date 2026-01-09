@@ -12,7 +12,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+
 
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -20,21 +22,19 @@ public class MainWindow extends JFrame implements ActionListener {
     private JMenu adminMenu;
     private JMenu booksMenu;
     private JMenu membersMenu;
-
     private JMenuItem adminExit;
-
     private JMenuItem booksView;
     private JMenuItem booksAdd;
     private JMenuItem booksDel;	
     private JMenuItem booksIssue;
     private JMenuItem booksReturn;
-
     private JMenuItem memView;
     private JMenuItem memAdd;
     private JMenuItem memDel;
-
     private Library library;
 
+    
+    
     public MainWindow(Library library) {
 
         initialize();
@@ -45,9 +45,7 @@ public class MainWindow extends JFrame implements ActionListener {
         return library;
     }
 
-    /**
-     * Initialize the contents of the frame.
-     */
+    
     private void initialize() {
 
         try {
@@ -162,10 +160,10 @@ public class MainWindow extends JFrame implements ActionListener {
 
     public void displayBooks() {
         List<Book> booksList = library.getBooks();
-        // headers for the table
+
         String[] columns = new String[]{"Title", "Author", "Pub Date", "Status"};
 
-        Object[][] data = new Object[booksList.size()][6];
+        Object[][] data = new Object[booksList.size()][4];
         for (int i = 0; i < booksList.size(); i++) {
             Book book = booksList.get(i);
             data[i][0] = book.getTitle();
@@ -173,12 +171,43 @@ public class MainWindow extends JFrame implements ActionListener {
             data[i][2] = book.getPublicationYear();
             data[i][3] = book.getStatus();
         }
-        
-        JTable table = new JTable(data, columns);
+
+        JTable table = new JTable(data, columns) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        // 6.1: if book is on loan, show patron details when clicked
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                int row = table.getSelectedRow();
+                if (row < 0 || row >= booksList.size()) return;
+
+                Book selectedBook = booksList.get(row);
+
+                if (!selectedBook.isOnLoan() || selectedBook.getLoan() == null) return;
+
+                Patron p = selectedBook.getLoan().getPatron();
+                if (p == null) return;
+
+                javax.swing.JOptionPane.showMessageDialog(
+                        MainWindow.this,
+                        "This book is currently on loan to:\n\n" + p.getDetailsLong(),
+                        "Patron details",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        });
+
         this.getContentPane().removeAll();
         this.getContentPane().add(new JScrollPane(table));
         this.revalidate();
-}
+    }
+
+
     
     
         
@@ -206,29 +235,34 @@ public class MainWindow extends JFrame implements ActionListener {
         	}
         	};
         
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
-        	@Override
-        	public void mouseClicked(java.awt.event.MouseEvent e) {
-        		if (e.getClickCount() == 2) {
-        	int row = table.getSelectedRow();
-        	if (row >= 0) {
-        		int patronID = (int) table.getValueAt (row, 0);
-        		try {
-					showBorrowedPopUp(patronID);
-				} catch (LibraryException e1) {
-					
-					e1.printStackTrace();
-				}
+        	table.addMouseListener(new java.awt.event.MouseAdapter() {
+        	    @Override
+        	    public void mouseClicked(java.awt.event.MouseEvent e) {
+        	        int row = table.getSelectedRow();
+        	        if (row < 0 || row >= patronsList.size()) return;
+
+        	        Patron selectedPatron = patronsList.get(row);
+
+        	        JOptionPane.showMessageDialog(
+        	                MainWindow.this,
+        	                selectedPatron.getDetailsLong(),
+        	                "Patron details",
+        	                JOptionPane.INFORMATION_MESSAGE
+        	        );
+        	    }
+        	});
+
+        	// Add table to window
+        	this.getContentPane().removeAll();
+        	this.getContentPane().add(new JScrollPane(table));
+        	this.revalidate();
         	}
-        		}
-        	}
-        });
-        
-        this.getContentPane().removeAll();
-    	this.getContentPane().add(new JScrollPane(table));
-    	this.revalidate();
-        }
-        	
+
+        	// <-- closes displayPatrons()
+
+        	} 
+        	// <-- closes MainWindow class
+
         
         	
        

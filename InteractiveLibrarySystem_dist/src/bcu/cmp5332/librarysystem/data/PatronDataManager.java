@@ -36,6 +36,7 @@ public class PatronDataManager implements DataManager {
         try (PrintWriter out = new PrintWriter(new FileWriter(RESOURCE))) {
             for (Patron patron : library.getPatrons()) {
                 out.print(patron.getId() + SEPARATOR);
+                out.print(patron.getName() + SEPARATOR);
                 out.print(patron.getPhone() + SEPARATOR);
                 out.print(patron.getEmail() + SEPARATOR);
                 out.println();
