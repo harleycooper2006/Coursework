@@ -123,8 +123,6 @@ The `addbook` and `addpatron` commands prompt for record details interactively.
 
 The application loads its library records from the configured local data files. Keep the expected resource files available when running the project.
 
-**Note:** The repository's build configuration and exact runtime setup should be verified before publishing a definitive command-line build or launch procedure.
-
 ## Testing
 
 The project includes JUnit 5 tests covering selected behaviours of the domain model and library operations.
